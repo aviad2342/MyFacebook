@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html> 
+<head>
+<meta charset="utf-8">
+<title>Sign-In to facebook</title>
+<link rel="shortcut icon" href="pics/Facebook.ico">
+<link rel="stylesheet" type="text/css" href="FacebookStyle.css" />
+<script src="jquery-1.11.3.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+   
+function IsLetters(textBox, label){
+	 
+	var box = document.getElementById(textBox);
+	var lb = document.getElementById(label);
+	var alphaExp = /^([a-zA-Z]+\s)*[a-zA-Z]+$/;
+	
+	if(box.value != ""){
+	   if(!box.value.match(alphaExp)){
+		   lb.innerHTML = "This fields must contain only english letters!";
+	    }
+	}
+}
+
+function IsLettersAndNumbers(textBox, label){
+	
+	var box = document.getElementById(textBox);
+	var lb = document.getElementById(label);
+	var alphaExp = /^[a-zA-Z0-9]+([\.\-]?[a-zA-Z0-9]+)?$/;
+	
+	if(box.value != ""){
+	   if(!box.value.match(alphaExp)){
+		   lb.innerHTML = "This field must contain only english letters and numbers!";
+	    }
+	}
+}
+function IsLettersAndNumbersP(textBox, label){
+	
+	var box = document.getElementById(textBox);
+	var lb = document.getElementById(label);
+	var alphaExp = /^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+){6,}$/;
+	
+	if(box.value != ""){
+	   if(!box.value.match(alphaExp)){
+		   lb.innerHTML = "field must contain 6 characters 1 Alphabet and 1 Number!";
+	    }
+	}
+}
+function IsEmail(textBox, label){
+	
+	var box = document.getElementById(textBox);
+	var lb = document.getElementById(label);
+	var alphaExp = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
+	
+	if(box.value != ""){
+	   if(!box.value.match(alphaExp)){
+		   lb.innerHTML = "Sorry this is not a valid e-mail address!";
+	    }
+	}
+}
+function focusBack(textBox, label){
+	
+	var box = document.getElementById(textBox);
+	var lb = document.getElementById(label);
+	
+	if(lb.innerHTML.length > 0){
+		lb.innerHTML = "";
+	}
+}
+
+function passwordMatch(pass1, pass2, label){
+	
+	var p1 = document.getElementById(pass1);
+	var p2 = document.getElementById(pass2);
+	var lb = document.getElementById(label);
+	
+	if(p1.value != p2.value){
+		lb.innerHTML = "Sorry passwords do not match!";
+	}
+}
+
+function resetFields(){	
+	var errLabels = document.getElementsByClassName("errLabelSet");
+     for(var i=0 ; i < errLabels.length ; i++){
+    	 errLabels[i].innerHTML = "";
+     }
+}
+
+function blink(label) {
+	   var f = label;
+       var id = setInterval(function() {f.style.display = (f.style.display == 'none' ? '' : 'none');}, 500);
+       window.setTimeout(function(){window.clearInterval(id);}, 4000);
+       window.setTimeout(function(){f.style.display = ''; }, 4300);      
+}
+	
+$(document).ready(function(){
+	
+	//if(jQuery.url.param("isUser") == "no"){
+		//$( "#errsub" ).text("Invalid Username Or Password");
+	//}
+	if (window.location.search.indexOf('isUser=no') != -1) {
+		$( "#errsub" ).text("Invalid Username Or Password");
+    }
+	
+	$( "#Unameinput" ).focus(function() {
+		$( "#errsub" ).text("");
+		});	
+	$( "#Passinput" ).focus(function() {
+		$( "#errsub" ).text("");
+		}); 
+/*
+$('#logbtn').click(function() {
+		$.getJSON("DataBase/facebookUsers.json",function(result){ 
+			var element = [];
+			var uname;
+			var name;    
+			var pass;
+			var lastname; 
+			var err = "Invalid Username Or Password";
+			$.each(result, function(index, element){
+				uname = element.userName;
+				pass = element.password;
+				name = element.firstName;
+				lastname = element.lastname
+			    if(uname == $( "#Unameinput" ).val()  &&  pass == $( "#Passinput" ).val()){	
+			    	sessionStorage.setItem('user_name', uname);
+			    	sessionStorage.setItem('name', name);
+			    	sessionStorage.setItem('lastname', lastname);
+			    	$( "#logtoface" ).submit();
+			    	err = "";
+			    }
+		    });    
+		$( "#errsub" ).text(err); 
+	 });
+   });*/   
+       
+$('#logbtn').click(function() {
+
+	if($( "#Unameinput" ).val().length === 0  ||  $( "#Passinput" ).val().length === 0){	
+		$( "#errsub" ).text("You Must Fill All Fields");
+	}else{
+		var uname = $( "#Unameinput" ).val();
+		var pass = $( "#Passinput" ).val();
+		sessionStorage.setItem('user_name', uname);
+		sessionStorage.setItem('password', pass);
+		$( "#logtoface" ).submit();
+	} 
+});   
+   
+$('#logbtnReg').click(function() {	
+	var errLabels = document.getElementsByClassName("errLabelSet");
+	//var inputBoxs = document.getElementsByName("inputText");
+     var inputBoxs = [];
+     inputBoxs[0] = document.getElementById('fName1');
+     inputBoxs[1] = document.getElementById('lName1');
+     inputBoxs[2] = document.getElementById('uName1');
+     inputBoxs[3] = document.getElementById('eMail1');
+     inputBoxs[4] = document.getElementById('password1');
+     inputBoxs[5] = document.getElementById('passwordV');
+	var x = true;  
+     
+	for(var j=0 ; j < errLabels.length ; j++){
+		if(inputBoxs[j].value == ""){
+   	     errLabels[j].innerHTML = "You must fill this field!";
+   	     blink(errLabels[j]);
+   	     x = false;
+		}
+    }
+    for(var i=0 ; i < errLabels.length ; i++){
+       if(errLabels[i].innerHTML != "" && errLabels[i].innerHTML != "You must fill this field!"){
+    	   blink(errLabels[i]);
+     	   x = false;
+       }
+    }
+    if(x){
+    	$( "#regToface" ).submit();
+    }
+});
+});
+</script>
+</head>
+<body class="LogInbodyStyle">
+	<div id="logIn" class="logInDiv">
+	<div id="faceLogo" class="cfaceLogo"><a class="fLogo" href="FormLogInValidation.html" rel="toggle"><img alt="" src="pics/Facebooklogoicon.png"></a></div>
+	<form id="logtoface" class="logInform" action="UserLogInValidtion.jsp" method="post">
+	<div id="faceUname" class="cfaceUname"><label class="Unamelb">User Name:<input id="Unameinput" class="Unamein" type="text" name="userName"></label></div>
+	<div id="facePass" class="cfacePass"><label class="Passlb">Password:<input id="Passinput" class="Passin" type="password" name="password"></label></div>
+	<input id="logbtn" class="btnLogIn" type="button" value="Log In"> <label id="errsub" class="errup"></label>
+	</form>
+	</div>
+	<form id="regToface" class="formSet" name="ValidationForm" action="UserRegistration.jsp" method="post">
+	 <div class="fieldss">
+	 <img class="formPic" src="pics/FB-Helps-You-Connect.jpg">
+		<fieldset class="fields">
+		<h1 class="sign">Sign Up</h1>
+			<div class="FLname">
+				<input id = "fName1" class="fName2" type="text" name="firstName" onfocus="focusBack('fName1','lNameErr')" onblur="IsLetters('fName1','lNameErr')" placeholder=" First Name">
+				<input id = "lName1" class="lName2" type="text" name="lastName" onfocus="focusBack('lName1','lNameErr');IsLetters('fName1','lNameErr');" onblur="IsLetters('lName1','lNameErr')" placeholder=" Last Name">
+				<label class="errLabelSet" id ="lNameErr"></label>
+			</div>
+			<div class="divUName">
+				<input id = "uName1" class="uName2" type="text" name="userName" onfocus="focusBack('uName1','uNameErr')" onblur="IsLettersAndNumbers('uName1','uNameErr')" placeholder=" User Name">
+				<label class="errLabelSet" id ="uNameErr"></label>
+			</div>
+			<div class="diveMail">
+				<input id = "eMail1" class="eMail2" type="text" name="email" onfocus="focusBack('eMail1','eMailErr')" onblur="IsEmail('eMail1', 'eMailErr')" placeholder=" E-mail Address" placeholder=" E-mail Address">
+				<label class="errLabelSet" id="eMailErr"></label>
+			</div>
+			<div class="divPassword">
+				<input id = "password1" class="password2" type="password" name="password" onfocus="focusBack('password1','passwordErr')" onblur="IsLettersAndNumbersP('password1','passwordErr')" placeholder=" Password">
+				<label class="errLabelSet" id="passwordErr"></label>
+			</div>
+			<div class="divPasswordV">
+				<input id = "passwordV" class="passwordV2" type="password" name="inputText" onfocus="focusBack('passwordV','passwordVErr')" onblur="passwordMatch('password1', 'passwordV','passwordVErr')" placeholder=" Password Validation">
+				<label class="errLabelSet" id="passwordVErr"></label><br>
+			</div>
+			<div class="divBtn">
+				<input id="logbtnReg" class="btn" type="button" value="Submit"> <input class="btn" type="reset" value="Reset" onclick="resetFields()">
+			</div>
+		</fieldset>
+		</div>
+	</form>
+	<footer id="footer" class="foot"> Copyright © Aviad Ben Hayun And Itamar Frenkel </footer>
+
+</body>
+</html>
